@@ -16,10 +16,9 @@ Source: NYPD Shooting Incident Data (Open Data NYC)
     Location (borough, precinct, latitude/longitude)
     Victim demographics (age group, sex, race)
     Injury or fatality outcome
-
 All data cleaning and transformations were performed to ensure accuracy, consistency, and reproducibility.
 
-## Methods & Tools
+## Methods & Tools:
 ### Data Cleaning & Validation:
     Handled missing values, standardized date/time fields, validated geographic fields
 
@@ -27,7 +26,7 @@ All data cleaning and transformations were performed to ensure accuracy, consist
     Trend analysis, distribution analysis, and comparative breakdowns
 
 ### Visualization:
-    ggplot2 for clear, publication-ready charts
+    ggplot2 for clear, publication-ready charts    
 
 ### Reproducibility:
     Modular R scripts with documented steps and assumptions
@@ -39,3 +38,20 @@ The analysis reveals clear temporal patterns, geographic clustering, and demogra
     Timing and location of intervention programs
     Ongoing program evaluation and impact measurement
 
+### Incidents occurrence Location
+
+
+This chart shows clear seasonal spikes during summer months, suggesting opportunities for timed prevention and outreach efforts.  
+## Statistical Modeling: Factors Associated with Fatal Shooting Outcomes
+   ### Purpose: To explore whether timing of incidents and victim characteristics are associated with the likelihood that a shooting results in a fatal outcome. This analysis is intended to support population-level understanding and program planning, not individual-level prediction.
+   ### Model Overview
+      A logistic regression model was fitted using NYPD shooting incident data, with the outcome variable indicating whether an incident resulted in a fatality.
+     Outcome Variable: STATISTICAL_MURDER_FLAG (Fatal vs. Non-fatal shooting)
+     Predictor Variables:Time of day (grouped into intervals), Victim age group, Victim sex, Victim race
+The model estimates associations, not causation, and results are interpreted in the context of public-interest and equity-focused analysis.
+
+## Key Findings
+   Time of day is significantly associated with fatal outcomes, with certain evening and early morning intervals showing higher odds of fatality compared to the reference period.
+   Victim age group shows a strong association, with higher odds of fatal outcomes among older age groups relative to younger victims.
+   Victim sex was not a statistically significant predictor in this model.
+   Race variables were not statistically significant after accounting for other factors, underscoring the importance of interpreting disparities in the context of structural and environmental factors rather than individual characteristics.
