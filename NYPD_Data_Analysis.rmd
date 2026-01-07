@@ -1,0 +1,260 @@
+---
+title: "NYPD_Data_Analysis"
+author: "MSDS_BVS"
+date: "2023-11-09"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+# NEW YORK SHOOTING INCIDENT DATA REPORT
+
+# In this assignment we took New York Police Department Shooting Indident data from the year 2006-2022 for data analysis.
+
+# STEP 1: How to import Dataset in a reproducible manner 
+
+```{r}
+library(readr)
+url_in <- "https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD"
+dataset <- read_csv(url_in)
+head(dataset,show_col_types = FALSE)
+```
+
+## Unique keys - Duplicate Keys
+```{r}
+dim(dataset) #  27312    21
+length(unique(dataset$INCIDENT_KEY))
+```
+
+## Summary of the dataset
+```{r}
+summary(dataset)
+```
+
+
+# STEP 2: Tidying and Transforming the data 
+
+## Most of the attributes or columns have missing entries which dont contribute much for data exploration, so they were removed.
+```{r}
+library(dplyr)
+
+dataset2 <- dataset %>% 
+  select(-c(LOC_OF_OCCUR_DESC, PRECINCT, JURISDICTION_CODE,
+            LOC_CLASSFCTN_DESC, LOCATION_DESC,
+            PERP_AGE_GROUP, PERP_SEX, PERP_RACE,
+            X_COORD_CD, Y_COORD_CD, Latitude, Longitude, Lon_Lat))
+
+
+head(dataset2)
+#dim(dataset2) # 27312     8
+```
+
+## Summary of the dataset2
+```{r}
+summary(dataset2)
+```
+
+## Checking categorical and logical attributes
+```{r}
+unique(dataset2$BORO)
+unique(dataset2$STATISTICAL_MURDER_FLAG)
+unique(dataset2$VIC_AGE_GROUP) 
+unique(dataset2$VIC_SEX) 
+unique(dataset2$VIC_RACE) 
+```
+
+## Replacing wrong entry with "UNKNOWN" 
+```{r}
+dataset2$VIC_AGE_GROUP[dataset2$VIC_AGE_GROUP == "1022"] <- "UNKNOWN"
+unique(dataset2$VIC_AGE_GROUP)
+```
+
+
+## STEP 3: Visualizations and Analysis 
+
+### 1.Plot a barplot for incident location(BOROUGH)
+```{r}
+library(ggplot2)
+ggplot(dataset2,aes(x=BORO, fill= VIC_SEX )) +
+  labs(x = " Borough ",title=" Barplot for incident occurence location ")+
+  geom_bar(position='stack')+
+  scale_fill_manual(values=c('pink','lightblue','grey'))
+
+```
+
+## Percentage of Cases by Borough
+```{r}
+borough <- dataset2 %>%
+  group_by(BORO) %>% 
+  summarize (Cases = n() , Percentage = Cases *100/27311)
+
+borough %>% arrange(desc(Cases))
+```
+
+## Analysis
+### From the above plot and table, 69% of the total incidents occured in Brooklyn and Bronx together compared to other 3 places. Also the ratio of males victims is higher than female victims.
+
+### 2.Plot a barplot for victims race
+```{r}
+library(ggplot2)
+ggplot(dataset2, aes(x=VIC_RACE, fill= VIC_SEX)) +
+  labs(x = " Victims Race ",title=" Barplot for Victims Race ")+
+  geom_bar(position='stack')+
+  scale_fill_manual(values=c('pink','lightblue','grey'))+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+## Percentage of Cases by victims race
+```{r}
+victims_race <- dataset2 %>%
+  group_by(VIC_RACE) %>% 
+  summarize (Cases = n() , Percentage = Cases *100/27311)
+
+victims_race %>% arrange(desc(Cases))
+```
+
+### Analysis
+### From the above plot, we can say that black people are the most at-risk victims, followed by white hispanic and black hispanic. Racial disparity existence is evident from the plot.
+
+### 3.Plot a barplot for victims age group
+```{r}
+ggplot(dataset2,aes(x=VIC_AGE_GROUP, fill= VIC_SEX)) + 
+  labs(x = " Victims Age Group ",title=" Barplot for Victims Age Group ")+
+  geom_bar(position='stack')+
+  scale_fill_manual(values=c('pink','lightblue','grey'))
+```
+
+## Percentage of Cases by victims age group
+```{r}
+victims_age_group <- dataset2 %>%
+  group_by(VIC_AGE_GROUP) %>% 
+  summarize (Cases = n() , Percentage = Cases *100/27311)
+
+victims_age_group %>% arrange(desc(Cases))
+```
+### Analysis
+### From the above plot, around 81% of the victims are in the age group of 18-45, due to the fact that they are the most active and independent age group to stay out and engage in various activities.Also most of the victims are males. 
+
+
+### 4. Plot a barplot for victims age group based on race
+```{r}
+ggplot(dataset2,aes(x=VIC_AGE_GROUP, fill= VIC_RACE)) + 
+  labs(x = " Victims Age Group ",title=" Barplot for Victims Age Group ")+
+  geom_bar(position='stack')+
+  scale_fill_manual(values=c('red','yellow','black','blue','grey','white','brown'))
+```
+
+### Analysis
+### From the above plot,it is clear that males are the most targeted victims and among them are black race males.Among the females, the ratio of black females is high suggesting them as the targetted race.
+
+
+### 5. Plot a barplot for comparing 5 boros in terms of Fatal and Non-fatal incidents. (TRUE - Dead, FALSE-Injured)
+```{r}
+library(ggplot2)
+ggplot(dataset2,aes(x=BORO, fill= STATISTICAL_MURDER_FLAG )) +
+  labs(x = " Borough ",title=" Barplot for incident occurence location ")+
+  geom_bar(position='stack')+
+  scale_fill_manual(values=c('green','red'))
+```
+```{r}
+fatal <- dataset2 %>%
+  group_by(STATISTICAL_MURDER_FLAG) %>%
+  summarise(Cases=n(), percentage = Cases*100/27311)
+
+fatal
+```
+
+### Analysis
+### From the above plot,we can say that 80% of the shootings were non fatal.
+
+
+## Changing date format 
+```{r}
+library(lubridate)
+dataset2 <- dataset2 %>%
+  mutate(OCCUR_DATE = mdy(OCCUR_DATE))
+
+head(dataset2)
+``` 
+
+### How to extract year from the DATE
+
+```{r}
+library(lubridate)
+dataset2$Year <- format(as.POSIXct(dataset2$OCCUR_DATE, format = "%m/%d/%Y "), format="%Y")
+cases_by_boro <- dataset2 %>% group_by(BORO, Year) %>% summarize (Cases = n())
+cases_by_boro
+```
+## Percentage of cases year wise
+```{r}
+cases_by_year<- dataset2 %>% group_by(Year) %>% 
+  summarize (Cases = n(), Percentage = Cases *100/27312)
+
+cases_by_year %>% arrange(desc(Percentage))
+```
+
+### 6. Plot a barplot for yearly cases by borough for better understanding of demographics
+```{r}
+ggplot(cases_by_boro, aes(x= Year, y = Cases, fill = BORO))+
+  labs(x = " Yearly Cases ",title=" Barplot for Yearwise shootings ")+
+  geom_bar(stat = "identity")+
+  scale_fill_manual(values=c('red','blue','green','yellow','brown'))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+### Analysis
+### From the above plot,we can see that the number of cases declined between 2017-2019, and again increased during covid pandemic.
+
+## Percentage of cases by gender
+```{r}
+cases_by_gender <- dataset2 %>% 
+  group_by(VIC_SEX, Year) %>% 
+  summarize (Cases = n())
+
+cases_by_gender
+```
+
+```{r}
+perc_by_gender <- dataset2 %>%
+  group_by(VIC_SEX) %>%
+  summarize (Cases = n(), Percentage= Cases*100/27312)
+
+perc_by_gender %>% arrange(desc(Cases))
+```
+
+## Time of Occurence
+```{r}
+dataset2$seconds <- period_to_seconds(hms(dataset2$OCCUR_TIME))
+interval <- c("12 AM - 4 AM", "4 AM - 8 AM", "8 AM - 12 PM", "12 PM - 4 PM", "4 PM -8 PM" , "8 PM - 12 AM")
+dataset2$Interval <- interval[findInterval(dataset2$seconds, c(0, 4, 8,12, 16,20, 24)* 3600)]
+
+cases_by_intervals <- dataset2 %>%
+  group_by(Interval) %>%
+  summarise(Cases=n(), percentage= Cases*100/27312)
+
+cases_by_intervals %>% arrange(desc(Cases))
+  
+```
+
+### Analysis 
+### 75% incidents mostly occured after dark.
+
+```{r}
+head(dataset2)
+```
+## Step 4 : MODEL
+# Modelling-Logistic regression
+```{r}
+glm_fit <- glm(STATISTICAL_MURDER_FLAG ~ Interval + VIC_AGE_GROUP + VIC_SEX + VIC_RACE , family= binomial, data= dataset2 )
+summary(glm_fit)
+```
+## Interpret Results - P-values less than 0.05 suggest that there is a statistically significant association between the response variable and Interval plus victim age group.
+
+## Project Step 4: Conclusions and Bias Identification
+
+### From the data we have,it can be concluded that the black males within the age group of 18-45 are mojority of the victims of shooting in the areas of New York. Most of the incidents took place at Brooklyn and Bronx and between 8PM-4AM. 
+### It is unclear whether the victims are visitors or residents of Newyork.Also, there is no motive of the incident reported  which can be very useful in reducing the number of incidents in future. 
+### To have a more clear understanding about the magnitude of gun violence, the given data which has lots of missing entries that can introduce bias should be filled.
+### Appropriate measures such as increased patrol, awareness of gun violence  should be taken to reduce the number of race related shootings. 
+
