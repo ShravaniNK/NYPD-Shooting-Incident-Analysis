@@ -31,12 +31,12 @@ All data cleaning and transformations were performed to ensure accuracy, consist
 ### Reproducibility:
     Modular R scripts with documented steps and assumptions
 
-## Key Insights
+### Key Insights
 The analysis reveals clear temporal patterns, geographic clustering, and demographic disparities in gun violence incidents, highlighting opportunities for targeted, evidence-based prevention strategies rather than one-size-fits-all approaches.
-   ### These findings demonstrate how structured data analysis can support:
-       Strategic allocation of community resources
-       Timing and location of intervention programs
-       Ongoing program evaluation and impact measurement
+   #### These findings demonstrate how structured data analysis can support:
+        Strategic allocation of community resources
+        Timing and location of intervention programs
+        Ongoing program evaluation and impact measurement
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### Key Visual Findings
    ## 1. Incidents Occurrence Location
@@ -60,11 +60,12 @@ The analysis reveals clear temporal patterns, geographic clustering, and demogra
       Analysis: From the above plot,we can see that the number of cases declined between 2017-2019, and again increased during covid pandemic.
 
    ## 6. Time Of Incident Occurrence
-      ![Time_Of_Incident_Occurrence](https://github.com/ShravaniNK/NYPD-Shooting-Incident-Analysis/blob/dbdb8945c5083cb620f8a89adce1b4be8cd495ce/6.Time_Of_Occurrece.PNG)
+   ![Time_Of_Incident_Occurrence](https://github.com/ShravaniNK/NYPD-Shooting-Incident-Analysis/blob/dbdb8945c5083cb620f8a89adce1b4be8cd495ce/6.Time_Of_Occurrece.PNG)
       Analysis: 75% of the incidents mostly occured after dark.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-### Statistical Modeling: Factors Associated with Fatal Shooting Outcomes
-   ### Purpose: To explore whether timing of incidents and victim characteristics are associated with the likelihood that a shooting results in a fatal outcome. This analysis is intended to support population-level understanding and program planning, not individual-level prediction.
+## Statistical Modeling: Factors Associated with Fatal Shooting Outcomes
+   ### Purpose: 
+       To explore whether timing of incidents and victim characteristics are associated with the likelihood that a shooting results in a fatal outcome. This analysis is intended to support population-level understanding and program planning, not individual-level prediction.
    
    ### Model Overview
        A logistic regression model was fitted using NYPD shooting incident data, with the outcome variable indicating whether an incident resulted in a fatality.
@@ -82,7 +83,7 @@ The analysis reveals clear temporal patterns, geographic clustering, and demogra
         Victim sex was not a statistically significant predictor in this model.
         Race variables were not statistically significant after accounting for other factors, underscoring the importance of interpreting disparities in the context of structural and environmental factors rather than individual characteristics.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-### Final Conclusions & Bias Identifications
+## Final Conclusions & Bias Identifications
     From the data we have,it can be concluded that the black males within the age group of 18-45 are mojority of the victims of shooting in the areas of New York. Most of the incidents took place at Brooklyn and Bronx and between 8PM-4AM. 
     It is unclear whether the victims are visitors or residents of Newyork.Also, there is no motive of the incident reported  which can be very useful in reducing the number of incidents in future. 
     To have a more clear understanding about the magnitude of gun violence, the given data which has lots of missing entries that can introduce bias should be filled.
