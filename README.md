@@ -38,19 +38,29 @@ The analysis reveals clear temporal patterns, geographic clustering, and demogra
     Timing and location of intervention programs
     Ongoing program evaluation and impact measurement
 
-### Incidents occurrence Location
+### Key Visual Findings
+## 1. Incidents Occurrence Location
+![Incidents_Occurrence_Location](https://github.com/ShravaniNK/NYPD-Shooting-Incident-Analysis/blob/b123a15247e54ab204515308e552543aa74f8edb/1.Incident_Occurrence_Barplot.PNG)
+
+Analysis:
+From the above plot, most of the incidents took place in Brooklyn and Bronx compared to
+other 3 places. Also the ratio of males victims is higher than female victims.
 
 
-This chart shows clear seasonal spikes during summer months, suggesting opportunities for timed prevention and outreach efforts.  
-## Statistical Modeling: Factors Associated with Fatal Shooting Outcomes
+### Statistical Modeling: Factors Associated with Fatal Shooting Outcomes
    ### Purpose: To explore whether timing of incidents and victim characteristics are associated with the likelihood that a shooting results in a fatal outcome. This analysis is intended to support population-level understanding and program planning, not individual-level prediction.
    ### Model Overview
       A logistic regression model was fitted using NYPD shooting incident data, with the outcome variable indicating whether an incident resulted in a fatality.
-     Outcome Variable: STATISTICAL_MURDER_FLAG (Fatal vs. Non-fatal shooting)
-     Predictor Variables:Time of day (grouped into intervals), Victim age group, Victim sex, Victim race
+      Outcome Variable: 
+        STATISTICAL_MURDER_FLAG (Fatal vs. Non-fatal shooting)
+      Predictor Variables:
+        Time of day (grouped into intervals), 
+        Victim age group, 
+        Victim sex, 
+        Victim race
 The model estimates associations, not causation, and results are interpreted in the context of public-interest and equity-focused analysis.
 
-## Key Findings
+### Conclusions
    Time of day is significantly associated with fatal outcomes, with certain evening and early morning intervals showing higher odds of fatality compared to the reference period.
    Victim age group shows a strong association, with higher odds of fatal outcomes among older age groups relative to younger victims.
    Victim sex was not a statistically significant predictor in this model.
